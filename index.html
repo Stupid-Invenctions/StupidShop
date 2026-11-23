@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Stupid Shop</title>
+<style>
+:root{--bg:#fffbea;--fg:#1c1917;--card:#fff;--line:#e7e5e4;--acc:#e11d48;--mut:#78716c;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1c1917;--fg:#fafaf9;--card:#292524;--line:#44403c;--mut:#a8a29e}}
+:root[data-theme="dark"]{--bg:#1c1917;--fg:#fafaf9;--card:#292524;--line:#44403c;--mut:#a8a29e}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh}
+header{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--line)}
+header b{font-size:1.2rem;letter-spacing:-.5px}
+header span{color:var(--mut);font-size:.85rem}
+main{max-width:420px;margin:24px auto;padding:0 16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;text-align:center;cursor:pointer;transition:transform .15s}
+.card:active{transform:scale(.98)}
+.rock{font-size:110px;line-height:1.1}
+h1{font-size:1.4rem;margin:.3em 0}
+.price{font-size:1.6rem;font-weight:800;color:var(--acc)}
+p{color:var(--mut);margin:.4em 0}
+.btn{background:var(--acc);color:#fff;border:0;border-radius:12px;padding:14px 28px;font-size:1.05rem;font-weight:700;cursor:pointer}
+#view2{display:none;text-align:center}
+#msg{min-height:3em;margin-top:14px;font-weight:600}
+#buy{margin-top:16px;touch-action:none}
+#buy.free{position:fixed;z-index:9}
+#e{font-size:.8rem;color:var(--mut);margin-top:30px}
+</style>
+</head>
+<body>
+<header><b>🪨 Stupid Shop</b><span>🛒 0</span></header>
+<main>
+ <div id="view1" class="card" onclick="openProduct()">
+  <div class="rock">🪨</div>
+  <h1>Pet Rock</h1>
+  <p>A pedra de estimação original. Não come, não late, não pede passeio.</p>
+  <div class="price">R$ 99,90</div>
+  <p>⭐⭐⭐⭐⭐ (1 avaliação: "é uma pedra")</p>
+  <p><small>toque para ver detalhes</small></p>
+ </div>
+ <div id="view2">
+  <div class="rock">🪨</div>
+  <h1>Pet Rock</h1>
+  <div class="price">R$ 99,90</div>
+  <p>Estoque: 1 (sempre foi 1)</p>
+  <button id="buy" class="btn">Comprar agora</button>
+  <div id="msg"></div>
+ </div>
+</main>
+<script>
+var N=14,esc=0,msgs=["Ei, volta aqui... quer dizer, sai daí!","Tem certeza? Pense na sua conta bancária.","Você NÃO precisa de uma pedra.","Quase! Mas não.","Opa, escorreguei.","Isso é uma pedra, gente.","Desiste, vai.","Não toque em mim!","Tá, eu corro mais rápido que isso.","Sério, é só uma pedra.","Última chance de ser uma pessoa sensata.","Você é persistente, hein...","Ok, tô ficando cansado...","Tá bom. Tu venceu."];
+var buy=document.getElementById('buy'),msg=document.getElementById('msg');
+function openProduct(){document.getElementById('view1').style.display='none';document.getElementById('view2').style.display='block'}
+function flee(e){
+ if(esc>=N)return;
+ e.preventDefault();
+ buy.classList.add('free');
+ var w=window.innerWidth-buy.offsetWidth-16,h=window.innerHeight-buy.offsetHeight-16;
+ buy.style.left=Math.max(8,Math.random()*w)+'px';
+ buy.style.top=Math.max(8,Math.random()*h)+'px';
+ msg.textContent=msgs[Math.min(esc,msgs.length-1)];
+ esc++;
+ if(esc>=N)msg.textContent=msgs[N-1];
+}
+buy.addEventListener('pointerenter',flee);
+buy.addEventListener('pointerdown',flee);
+buy.addEventListener('click',function(e){
+ if(esc<N){flee(e);return}
+ show404();
+});
+function show404(){
+ document.title='404 Not Found';
+ document.documentElement.removeAttribute('data-theme');
+ document.head.innerHTML='<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>404 Not Found</title>';
+ document.documentElement.style.cssText='background:#fff;color:#000';
+ document.body.style.cssText='background:#fff;color:#000;margin:0;padding:8px;font-family:Times New Roman,serif;text-align:center';
+ document.body.innerHTML='<h1 style="font-size:2em;font-weight:bold;margin:.67em 0">404 Not Found</h1><hr style="margin:8px 0"><center>nginx/1.18.0 (Ubuntu)</center>';
+}
+</script>
+</body>
+</html>
+  
